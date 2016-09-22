@@ -16,7 +16,7 @@
  */
 class Raven_ReprSerializer extends Raven_Serializer
 {
-    protected function serializeValue($value)
+    protected function serializeValue($value, $max_depth, $_depth)
     {
         if ($value === null) {
             return 'null';

@@ -61,16 +61,16 @@ class Raven_Serializer
     public function serialize($value, $max_depth=3, $_depth=0)
     {
         if (is_object($value) || is_resource($value)) {
-            return $this->serializeValue($value);
+            return $this->serializeValue($value, $max_depth, $_depth);
         } elseif ($_depth < $max_depth && is_array($value)) {
             $new = array();
             foreach ($value as $k => $v) {
-                $new[$this->serializeValue($k)] = $this->serialize($v, $max_depth, $_depth + 1);
+                $new[$this->serializeValue($k, $max_depth, $_depth)] = $this->serialize($v, $max_depth, $_depth + 1);
             }
 
             return $new;
         } else {
-            return $this->serializeValue($value);
+            return $this->serializeValue($value, $max_depth, $_depth);
         }
     }
 
@@ -95,7 +95,7 @@ class Raven_Serializer
         return $value;
     }
 
-    protected function serializeValue($value)
+    protected function serializeValue($value, $max_depth, $_depth)
     {
         if (is_null($value) || is_bool($value) || is_float($value) || is_integer($value)) {
             return $value;
