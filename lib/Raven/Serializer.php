@@ -100,7 +100,11 @@ class Raven_Serializer
         if (is_null($value) || is_bool($value) || is_float($value) || is_integer($value)) {
             return $value;
         } elseif (is_object($value) || gettype($value) == 'object') {
-            return 'Object '.get_class($value);
+            if ($_depth < $max_depth && method_exists($value, '__debugInfo')) {
+                return $this->serialize($value->__debugInfo(), $max_depth, $_depth + 1);
+            } else {
+                return 'Object '.get_class($value);
+            }
         } elseif (is_resource($value)) {
             return 'Resource '.get_resource_type($value);
         } elseif (is_array($value)) {
